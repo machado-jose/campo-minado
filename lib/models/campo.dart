@@ -13,7 +13,7 @@ class Campo {
 
   Campo({
     @required this.linha,
-    @required this.coluna,
+    @required this.coluna
   });
 
   void adicionarVizinho(Campo vizinho) {
