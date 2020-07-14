@@ -33,6 +33,7 @@ class Campo {
     this._aberto = true;
 
     if (this._minado) {
+      this._explodido = true;
       throw ExplosaoException();
     }
 
