@@ -67,7 +67,7 @@ class Campo {
   }
 
   bool get explodido {
-    return this.explodido;
+    return this._explodido;
   }
 
   bool get marcado {
