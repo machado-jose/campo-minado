@@ -8,9 +8,9 @@ class CampoWidget extends StatelessWidget {
   final Function(Campo) onAlternarMarcacao;
 
   const CampoWidget({
-    this.campo,
-    this.onAbrir,
-    this.onAlternarMarcacao,
+    @required this.campo,
+    @required this.onAbrir,
+    @required this.onAlternarMarcacao,
   });
 
   Widget _getImage(){
