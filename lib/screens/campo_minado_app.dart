@@ -13,11 +13,7 @@ class CampoMinadoApp extends StatefulWidget {
 class _CampoMinadoAppState extends State<CampoMinadoApp> {
   bool _venceu;
 
-  Tabuleiro _tabuleiro = new Tabuleiro(
-    colunas: 12,
-    linhas: 12,
-    qtdBombas: 3,
-  );
+  Tabuleiro _tabuleiro;
 
   void _onReiniciar() {
     setState(() {
@@ -27,7 +23,7 @@ class _CampoMinadoAppState extends State<CampoMinadoApp> {
   }
 
   void _onAbrir(Campo campo) {
-    if(_venceu != null) return;
+    if (_venceu != null) return;
     setState(() {
       try {
         campo.abrir();
@@ -42,7 +38,7 @@ class _CampoMinadoAppState extends State<CampoMinadoApp> {
   }
 
   void _onAlternarMarcacao(Campo campo) {
-    if(_venceu != null) return;
+    if (_venceu != null) return;
     setState(() {
       campo.alternarMarcacao();
       if (_tabuleiro.resolvido) {
@@ -51,22 +47,23 @@ class _CampoMinadoAppState extends State<CampoMinadoApp> {
     });
   }
 
+  Tabuleiro _getTabuleiro(double largura, double altura) {
+    if (_tabuleiro == null) {
+      int qtdeColunas = 15;
+      double tamanhoCampo = largura / qtdeColunas;
+      int qtdeLinhas = (altura / tamanhoCampo).floor();
+
+      _tabuleiro = Tabuleiro(
+        linhas: qtdeLinhas,
+        colunas: qtdeColunas,
+        qtdBombas: 50,
+      );
+    }
+    return _tabuleiro;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Campo campo = new Campo(coluna: 0, linha: 0);
-
-    Campo vizinho1 = new Campo(linha: 1, coluna: 0);
-    Campo vizinho2 = new Campo(linha: 1, coluna: 1);
-    vizinho1.minar();
-    vizinho2.minar();
-    campo.adicionarVizinho(vizinho1);
-    campo.adicionarVizinho(vizinho2);
-
-    try {
-      //campo.minar();
-      campo.alternarMarcacao();
-    } on ExplosaoException {}
-
     return MaterialApp(
       home: Scaffold(
         appBar: ResultadoWidget(
@@ -74,10 +71,16 @@ class _CampoMinadoAppState extends State<CampoMinadoApp> {
           onReiniciar: _onReiniciar,
         ),
         body: Container(
-          child: TabuleiroWidget(
-            tabuleiro: _tabuleiro,
-            onAbrir: _onAbrir,
-            onAlternarMarcacao: _onAlternarMarcacao,
+          color: Colors.grey,
+          child: LayoutBuilder(
+            builder: (ctx, constraints) => TabuleiroWidget(
+              tabuleiro: _getTabuleiro(
+                constraints.maxWidth,
+                constraints.maxHeight,
+              ),
+              onAbrir: _onAbrir,
+              onAlternarMarcacao: _onAlternarMarcacao,
+            ),
           ),
         ),
       ),
